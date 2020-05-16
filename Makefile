@@ -29,8 +29,9 @@ VENV_PYTHON_ENV = \
 	MPLBACKEND=TkAgg \
 	MPLCONFIGDIR=$(MPL_DIR) \
 	KERAS_HOME=$(KERAS_DIR) \
-	PYTHONPATH=$(PYTHONPATH):$(SRC_ML_DIR) \
-	DATASETS=$(DATASETS)
+	DATASETS=$(DATASETS) \
+	PYTHONPATH=$(PYTHONPATH):$(SRC_DIR) \
+	ASSETS=$(ROOT_DIR)/assets
 VENV_REQUIREMENTS := $(ROOT_DIR)/requirements.txt
 
 OCV_URL := https://github.com/opencv/opencv/archive/$(OCV_VER).tar.gz
@@ -105,10 +106,7 @@ gen-opencv-symlink:
 setup: venv opencv
 
 run: $(OUTPUT_DIR)
-ifeq ($(SRC),)
-	$(error Set SRC={source file path} to run a script.)
-endif
-	source $(VENV_ACTIVATE) && $(VENV_PYTHON_ENV) python $(SRC_DIR)/$(SRC) \
+	source $(VENV_ACTIVATE) && $(VENV_PYTHON_ENV) python $(SRC_DIR)/main.py \
 		$(PARAMS)
 
 clean-venv:
