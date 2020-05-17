@@ -24,7 +24,7 @@ class FaceDetector(Thread):
         while True:
             image = self.queue.get()
             
-            faces = self.casc.detectMultiScale(image, 1.1, 6)
+            faces = self.casc.detectMultiScale(image, 1.1, 4)
             
             self.lock.acquire()
             self.faces = []
@@ -32,6 +32,8 @@ class FaceDetector(Thread):
                 if w > self.size_thresh and h > self.size_thresh:
                     self.faces.append((x, y, w, h))
             self.lock.release()
+
+
 
     def get_faces(self):
         self.lock.acquire()

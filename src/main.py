@@ -31,9 +31,7 @@ if __name__ == '__main__':
         if current >= process_each:
             faces = detector.put_image(frame)
             current = 0
-
         faces = detector.get_faces()
-
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 1)
             cv2.putText(
@@ -44,13 +42,12 @@ if __name__ == '__main__':
                 1,
                 (255, 0, 0),
                 1)
+        current += 1
 
         cv2.imshow('Cascade Classifier', frame)
 
         if cv2.waitKey(1) == ord('q'):
             break
-
-        current += 1
 
     cap.release()
     cv2.destroyAllWindows()
