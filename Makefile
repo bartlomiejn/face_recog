@@ -7,7 +7,8 @@ JLEVEL ?= 10
 DATASETS ?= $(ROOT_DIR)/datasets
 
 SRC_DIR := $(ROOT_DIR)/src
-CONFIG_DIR := $(ROOT_DIR)/config
+CONTRIB_DIR := $(ROOT_DIR)/contrib
+OPENFACE_DIR := $(CONTRIB_DIR)/openface
 OUTPUT_DIR := $(ROOT_DIR)/output
 MPL_DIR := $(OUTPUT_DIR)/matplotlib
 KERAS_DIR := $(OUTPUT_DIR)/keras
@@ -30,7 +31,7 @@ VENV_PYTHON_ENV = \
 	MPLCONFIGDIR=$(MPL_DIR) \
 	KERAS_HOME=$(KERAS_DIR) \
 	DATASETS=$(DATASETS) \
-	PYTHONPATH=$(PYTHONPATH):$(SRC_DIR) \
+	PYTHONPATH=$(PYTHONPATH):$(SRC_DIR):$(OPENFACE_DIR) \
 	ASSETS=$(ROOT_DIR)/assets
 VENV_REQUIREMENTS := $(ROOT_DIR)/requirements.txt
 
@@ -53,6 +54,8 @@ OCV_CMAKE_PARAMS = \
 OCB_LIB_VER = $(shell $(VENV_PYTHON) -c "import sys; print(f'{sys.version_info.major}{sys.version_info.minor}m')")
 OCV_LIB = $(OCV_OBJ_DIR)/lib/python$(VENV_PYTHON_VER)/site-packages/cv2/python-$(VENV_PYTHON_VER)/cv2.cpython-$(OCB_LIB_VER)-darwin.so
 VENV_OCV_SYMLINK = $(VENV_DIR)/lib/python$(VENV_PYTHON_VER)/site-packages/cv2.so
+
+export OPENFACE_DIR
 
 $(OUTPUT_DIR):
 	mkdir -pv $@

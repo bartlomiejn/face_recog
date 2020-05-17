@@ -1,8 +1,8 @@
 import cv2
+import openface
 from threading import Thread
 from threading import Lock
 from queue import LifoQueue
-
 
 class FaceDetector(Thread):
 
@@ -32,8 +32,6 @@ class FaceDetector(Thread):
                 if w > self.size_thresh and h > self.size_thresh:
                     self.faces.append((x, y, w, h))
             self.lock.release()
-
-
 
     def get_faces(self):
         self.lock.acquire()

@@ -9,6 +9,11 @@ if __name__ == '__main__':
     casc = os.path.join(assets_dir, "haarcascade_frontalface_default.xml")
     detector = FaceDetector(casc)
 
+    openface_dir = os.environ["OPENFACE_DIR"]
+    if not openface_dir:
+        print("No OPENFACE_DIR added")
+        exit(-1)
+
     cap = cv2.VideoCapture(0)
 
     process_each = 5
