@@ -1,3 +1,6 @@
 [submodule "contrib/openface"]
 	path = contrib/openface
 	url = git@github.com:cmusatyalab/openface.git
+[submodule "contrib/torch"]
+	path = contrib/torch
+	url = https://github.com/torch/distro.git
