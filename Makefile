@@ -8,6 +8,7 @@ DATASETS ?= $(ROOT_DIR)/datasets
 
 SRC_DIR := $(ROOT_DIR)/src
 CONTRIB_DIR := $(ROOT_DIR)/contrib
+ASSETS_DIR := $(ROOT_DIR)/assets
 OPENFACE_DIR := $(CONTRIB_DIR)/openface
 OUTPUT_DIR := $(ROOT_DIR)/output
 MPL_DIR := $(OUTPUT_DIR)/matplotlib
@@ -31,8 +32,7 @@ VENV_PYTHON_ENV = \
 	MPLCONFIGDIR=$(MPL_DIR) \
 	KERAS_HOME=$(KERAS_DIR) \
 	DATASETS=$(DATASETS) \
-	PYTHONPATH=$(PYTHONPATH):$(SRC_DIR):$(OPENFACE_DIR) \
-	ASSETS=$(ROOT_DIR)/assets
+	PYTHONPATH=$(PYTHONPATH):$(SRC_DIR):$(OPENFACE_DIR) 
 VENV_REQUIREMENTS := $(ROOT_DIR)/requirements.txt
 
 OCV_URL := https://github.com/opencv/opencv/archive/$(OCV_VER).tar.gz
@@ -55,7 +55,7 @@ OCB_LIB_VER = $(shell $(VENV_PYTHON) -c "import sys; print(f'{sys.version_info.m
 OCV_LIB = $(OCV_OBJ_DIR)/lib/python$(VENV_PYTHON_VER)/site-packages/cv2/python-$(VENV_PYTHON_VER)/cv2.cpython-$(OCB_LIB_VER)-darwin.so
 VENV_OCV_SYMLINK = $(VENV_DIR)/lib/python$(VENV_PYTHON_VER)/site-packages/cv2.so
 
-export OPENFACE_DIR
+export OPENFACE_DIR ASSETS_DIR
 
 $(OUTPUT_DIR):
 	mkdir -pv $@
@@ -103,10 +103,13 @@ opencv: $(OCV_DIR) venv
 	$(MAKE) gen-opencv-symlink
 	$(VENV_PYTHON) -c "import cv2; print(cv2.__version__)"
 
+openface: 
+	$(OPENFACE_DIR)/models/get-models.sh
+
 gen-opencv-symlink:
 	ln -s $(OCV_LIB) $(VENV_OCV_SYMLINK)
 
-setup: venv opencv
+setup: venv opencv openface
 
 run: $(OUTPUT_DIR)
 	source $(VENV_ACTIVATE) && $(VENV_PYTHON_ENV) python $(SRC_DIR)/main.py \
