@@ -15,15 +15,22 @@ class FaceDetector(Thread):
             raise Exception(f"Couldn't load classifier: {classifier}")
 
         self.daemon = True
+        self.size_thresh = 200
         self.queue = LifoQueue()
         self.lock = Lock()
         self.faces = []
 
     def run(self):
-        while (True):
+        while True:
             image = self.queue.get()
+            
+            faces = self.casc.detectMultiScale(image, 1.1, 6)
+            
             self.lock.acquire()
-            self.faces = self.casc.detectMultiScale(image, 1.1, 6)
+            self.faces = []
+            for (x, y, w, h) in faces:
+                if w > self.size_thresh and h > self.size_thresh:
+                    self.faces.append((x, y, w, h))
             self.lock.release()
 
     def get_faces(self):

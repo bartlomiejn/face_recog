@@ -18,6 +18,7 @@ if __name__ == '__main__':
         print("Camera open failure")
         exit(-1)
 
+    detector.size_thresh = 200
     detector.start()
 
     while True:
@@ -27,18 +28,24 @@ if __name__ == '__main__':
             print(f"Did not receive frame, err: {err}")
             break
 
-        grayscale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
         if current >= process_each:
-            faces = detector.put_image(np.copy(grayscale))
+            faces = detector.put_image(frame)
             current = 0
 
         faces = detector.get_faces()
 
         for (x, y, w, h) in faces:
-            cv2.rectangle(grayscale, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 1)
+            cv2.putText(
+                frame, 
+                f'{x}, {y}, {w}, {h}', 
+                (x, y), 
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (255, 0, 0),
+                1)
 
-        cv2.imshow('Cascade Classifier', grayscale)
+        cv2.imshow('Cascade Classifier', frame)
 
         if cv2.waitKey(1) == ord('q'):
             break
